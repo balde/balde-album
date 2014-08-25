@@ -77,8 +77,6 @@
 #include "utils.h"
 
 
-balde_app_t* ba_app_init(void);
-void ba_app_free(balde_app_t *app);
 void ba_tmpl_header(balde_app_t *app, balde_response_t *resp);
 void ba_tmpl_footer(balde_app_t *app, balde_response_t *resp);
 void ba_tmpl_image_table_cell(balde_app_t *app, balde_response_t *resp, ba_image_t* img);

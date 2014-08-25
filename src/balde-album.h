@@ -36,4 +36,7 @@ typedef struct {
     // TODO: expand me!
 } ba_user_data_t;
 
+balde_app_t* ba_app_init(void);
+void ba_app_free(balde_app_t *app);
+
 #endif /* _BALDE_ALBUM_H */
