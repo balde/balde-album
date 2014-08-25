@@ -12,6 +12,7 @@
 
 #include <glib.h>
 #include <balde.h>
+#include <wand/MagickWand.h>
 #include "balde-album.h"
 #include "exif.h"
 #include "loader.h"
@@ -23,6 +24,7 @@
 balde_app_t*
 ba_app_init(void)
 {
+    MagickWandGenesis();
     balde_app_t *app = balde_app_init();
     app->user_data = NULL;
     const gchar *dirpath = g_getenv("IMAGES_DIRECTORY");
@@ -49,6 +51,7 @@ ba_app_free(balde_app_t *app)
         g_slist_free_full(ud->images, (GDestroyNotify) ba_free_image);
     g_free(ud);
     balde_app_free(app);
+    MagickWandTerminus();
 }
 
 
