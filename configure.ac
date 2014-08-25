@@ -18,7 +18,6 @@ AS_IF([test "x$ac_cv_prog_cc_c99" = "xno"], [
 ])
 
 AC_SEARCH_LIBS([ceil], [m],, AC_MSG_ERROR([ceil not found in libm.]))
-AC_SEARCH_LIBS([jpeg_start_decompress], [jpeg],, AC_MSG_ERROR([libjpeg not found.]))
 
 AC_ARG_WITH([valgrind], AS_HELP_STRING([--without-valgrind],
             [ignore presence of valgrind]))

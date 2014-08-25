@@ -14,7 +14,6 @@
 #include <math.h>
 #include <balde.h>
 #include <glib.h>
-#include <jpeglib.h>
 #include "balde-album.h"
 #include "utils.h"
 
@@ -54,40 +53,6 @@ ba_get_image_from_filename(balde_app_t *app, const gchar *filename)
             return img;
     }
     return NULL;
-}
-
-
-gint64
-ba_get_image_width(ba_image_t *img)
-{
-    // let's try exif first, as it should be cheapest.
-    if (img->metadata != NULL) {
-        for (GSList *tmp = img->metadata; tmp != NULL; tmp = g_slist_next(tmp)) {
-            ba_image_metadata_t *meta = tmp->data;
-            if (g_strcmp0(meta->name, "PixelXDimension") == 0) {
-                return g_ascii_strtoll(meta->value, NULL, 10);
-            }
-        }
-    }
-
-    // ok, no exif for us, let's try jpeg decompression
-    if (g_strcmp0(img->mimetype, "image/jpeg") == 0) {
-        struct jpeg_decompress_struct cinfo;
-        struct jpeg_error_mgr jerr;
-        cinfo.err = jpeg_std_error(&jerr);
-        jpeg_create_decompress(&cinfo);
-        jpeg_mem_src(&cinfo, img->image->str, img->image->len);
-        gint rc = jpeg_read_header(&cinfo, TRUE);
-        if (rc == 1) {
-            jpeg_start_decompress(&cinfo);
-            gint64 width = cinfo.output_width;
-            jpeg_destroy_decompress(&cinfo);
-            return width;
-        }
-    }
-
-    // no jpeg, no exif... png maybe?! hmm... no!
-    return -1;
 }
 
 

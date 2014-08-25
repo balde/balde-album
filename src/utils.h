@@ -16,7 +16,6 @@
 void ba_free_image_metadata(ba_image_metadata_t *meta);
 void ba_free_image(ba_image_t *img);
 ba_image_t* ba_get_image_from_filename(balde_app_t *app, const gchar *filename);
-gint64 ba_get_image_width(ba_image_t *img);
 gchar* ba_shorten_filename(const gchar *filename);
 
 #endif /* _BALDE_ALBUM_UTILS_H */

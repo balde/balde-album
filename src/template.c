@@ -109,20 +109,12 @@ void
 ba_tmpl_image_detail(balde_app_t *app, balde_response_t *resp, ba_image_t *img)
 {
     gchar *img_link = balde_app_url_for(app, "full", FALSE, img->filename);
-    gchar *tmp;
-    tmp = g_strdup_printf("    <h2>%s</h2>\n", img->filename);
-    balde_response_append_body(resp, tmp);
-    g_free(tmp);
-    // if we know the image width, and it is too big, we should resize it.
-    gint64 width = ba_get_image_width(img);
-    if (width > MAX_IMAGE_WIDTH)
-        tmp = g_strdup_printf(
-            "    <img src=\"%s\" width=\"%d\">\n"
+    gchar *tmp = g_strdup_printf(
+            "    <h2>%s</h2>\n"
+            "    <img src=\"%s\">\n"
             "    <p>\n"
             "      <a href=\"%s\">Click here to see in original size.</a>\n"
-            "    </p>\n", img_link, MAX_IMAGE_WIDTH, img_link);
-    else
-        tmp = g_strdup_printf("    <img src=\"%s\">\n", img_link);
+            "    </p>\n", img->filename, img_link, img_link);
     g_free(img_link);
     balde_response_append_body(resp, tmp);
     g_free(tmp);
