@@ -3,6 +3,7 @@
  * Copyright (C) 2014 Rafael G. Martins <rafael@rafaelmartins.eng.br>
  *
  * This program can be distributed under the terms of the LGPL-2 License.
+ * See the file COPYING.
  */
 
 /**
@@ -71,51 +72,15 @@
 #include <math.h>
 #include <glib.h>
 #include <gio/gio.h>
-#include <libexif/exif-data.h>
+
 #include <jpeglib.h>
 #include <balde.h>
 
-
-/**
- * Constants
- *
- * Defining a few constants to avoid magic numbers.
- */
-
-#define BUFFER_SIZE 1024
-#define IMAGES_PER_ROW 4
-#define MAX_FILENAME_LENGTH 32
-#define MAX_IMAGE_WIDTH 900
+#include "balde-album.h"
+#include "exif.h"
 
 
-/**
- * Structure and functions declarations.
- *
- * This is a single file app, then I'll just drop any declarations here,
- * instead of creating a header file :P
- */
 
-typedef struct {
-    gchar *name;
-    gchar *title;
-    gchar *value;
-} ba_image_metadata_t;
-
-typedef struct {
-    gchar *filepath;  // nul-terminated string
-    gchar *filename;  // nul-terminated string
-    gchar *mimetype;  // nul-terminated string
-    GString *image;   // binary string
-    GString *thumb;   // binary string
-    GSList *metadata;
-} ba_image_t;
-
-typedef struct {
-    GSList *images;
-    // TODO: expand me!
-} ba_user_data_t;
-
-void ba_dump_exif_entry(ExifEntry *entry, GSList **metadata);
 ba_image_t* ba_load_image_file(const gchar *filepath);
 gint ba_sort_images_by_filename(ba_image_t *a, ba_image_t *b);
 GSList* ba_load_images_directory(const gchar *dirpath);
@@ -140,22 +105,6 @@ balde_response_t* ba_view_thumb(balde_app_t *app, balde_request_t *req);
  * Miscelaneous functions
  */
 
-void
-ba_dump_exif_entry(ExifEntry *entry, GSList **metadata)
-{
-    if (entry == NULL)
-        return;
-    ba_image_metadata_t *m = g_new(ba_image_metadata_t, 1);
-    m->name = g_strdup(exif_tag_get_name_in_ifd(entry->tag,
-        exif_content_get_ifd(entry->parent)));
-    m->title = g_strdup(exif_tag_get_title_in_ifd(entry->tag,
-        exif_content_get_ifd(entry->parent)));
-    gchar buf[BUFFER_SIZE];
-    exif_entry_get_value(entry, buf, BUFFER_SIZE);
-    m->value = g_strdup(buf);
-    *metadata = g_slist_append(*metadata, m);
-}
-
 
 ba_image_t*
 ba_load_image_file(const gchar *filepath)
@@ -169,23 +118,13 @@ ba_load_image_file(const gchar *filepath)
         g_error_free(tmp_error);
         return NULL;
     }
-    ExifData *ed = exif_data_new_from_file(filepath);
     ba_image_t *img = g_new(ba_image_t, 1);
     img->filepath = g_strdup(filepath);
     img->filename = g_path_get_basename(filepath);
     img->image = g_string_new_len(contents, length);
     g_free(contents);
     img->thumb = NULL;
-    img->metadata = NULL;
-    if (ed != NULL) {
-        if (ed->data != NULL && ed->size > 0)
-            img->thumb = g_string_new_len(ed->data, ed->size);
-        exif_content_foreach_entry(ed->ifd[EXIF_IFD_0],
-            (ExifContentForeachEntryFunc) ba_dump_exif_entry, &(img->metadata));
-        exif_content_foreach_entry(ed->ifd[EXIF_IFD_EXIF],
-            (ExifContentForeachEntryFunc) ba_dump_exif_entry, &(img->metadata));
-        exif_data_unref(ed);
-    }
+    img->metadata = ba_dump_exif(img->image);
     return img;
 }
 

@@ -2,7 +2,8 @@ bin_PROGRAMS = \
 	balde-album
 
 balde_album_SOURCES = \
-	balde-album.c
+	balde-album.c \
+	exif.c
 
 balde_album_CFLAGS = \
 	$(AM_CFLAGS) \
