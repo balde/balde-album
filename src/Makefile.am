@@ -5,7 +5,9 @@ balde_album_SOURCES = \
 	balde-album.c \
 	exif.c \
 	loader.c \
-	utils.c
+	utils.c \
+	template.c \
+	views.c
 
 balde_album_CFLAGS = \
 	$(AM_CFLAGS) \

@@ -9,6 +9,7 @@
 #ifndef _BALDE_ALBUM_H
 #define _BALDE_ALBUM_H
 
+#include <balde.h>
 #include <glib.h>
 
 #define BUFFER_SIZE 1024

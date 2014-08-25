@@ -16,6 +16,7 @@
 #include <glib.h>
 #include <jpeglib.h>
 #include "balde-album.h"
+#include "utils.h"
 
 
 void
