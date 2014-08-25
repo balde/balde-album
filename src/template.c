@@ -14,6 +14,7 @@
 #include <balde.h>
 #include <glib.h>
 #include "balde-album.h"
+#include "image.h"
 #include "utils.h"
 
 
@@ -56,27 +57,21 @@ ba_tmpl_image_table_cell(balde_app_t *app, balde_response_t *resp, ba_image_t* i
 {
     balde_response_append_body(resp, "        <td>\n");
     gchar *img_link = balde_app_url_for(app, "image", FALSE, img->filename);
-    gchar *tmp;
-    if (img->thumb != NULL) {
-        gchar *thumb_link = balde_app_url_for(app, "thumb", FALSE, img->filename);
-        tmp = g_strdup_printf(
-            "          <a href=\"%s\">\n"
-            "            <img src=\"%s\">\n"
-            "          </a>\n"
-            "          <br>\n", img_link, thumb_link);
-        g_free(thumb_link);
-        balde_response_append_body(resp, tmp);
-        g_free(tmp);
-    }
+    gchar *thumb_link = balde_app_url_for(app, "thumb", FALSE, img->filename);
     gchar *tmp_filename = ba_shorten_filename(img->filename);
-    tmp = g_strdup_printf(
+    gchar *tmp = g_strdup_printf(
+        "          <a href=\"%s\">\n"
+        "            <img src=\"%s\">\n"
+        "          </a>\n"
+        "          <br>\n"
         "          <a href=\"%s\">\n"
         "            %s\n"
         "          </a>\n"
-        "        </td>\n", img_link, tmp_filename);
+        "        </td>\n", img_link, thumb_link, img_link, tmp_filename);
+    g_free(img_link);
+    g_free(thumb_link);
     g_free(tmp_filename);
     balde_response_append_body(resp, tmp);
-    g_free(img_link);
     g_free(tmp);
 }
 
@@ -109,13 +104,15 @@ void
 ba_tmpl_image_detail(balde_app_t *app, balde_response_t *resp, ba_image_t *img)
 {
     gchar *img_link = balde_app_url_for(app, "full", FALSE, img->filename);
+    gchar *img_resized_link = balde_app_url_for(app, "resized", FALSE, img->filename);
     gchar *tmp = g_strdup_printf(
             "    <h2>%s</h2>\n"
             "    <img src=\"%s\">\n"
             "    <p>\n"
             "      <a href=\"%s\">Click here to see in original size.</a>\n"
-            "    </p>\n", img->filename, img_link, img_link);
+            "    </p>\n", img->filename, img_resized_link, img_link);
     g_free(img_link);
+    g_free(img_resized_link);
     balde_response_append_body(resp, tmp);
     g_free(tmp);
     if (img->metadata == NULL)

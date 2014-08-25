@@ -15,27 +15,19 @@
 #include "balde-album.h"
 #include "exif.h"
 #include "loader.h"
+#include "utils.h"
 
 
 ba_image_t*
 ba_load_image_file(const gchar *filepath)
 {
     g_return_val_if_fail(filepath != NULL, NULL);
-    gchar *contents;
-    gsize length;
-    GError *tmp_error = NULL;
-    if (!g_file_get_contents(filepath, &contents, &length, &tmp_error)) {
-        g_printerr("%s\n", tmp_error->message);
-        g_error_free(tmp_error);
-        return NULL;
-    }
     ba_image_t *img = g_new(ba_image_t, 1);
     img->filepath = g_strdup(filepath);
     img->filename = g_path_get_basename(filepath);
-    img->image = g_string_new_len(contents, length);
-    g_free(contents);
-    img->thumb = NULL;
-    img->metadata = ba_dump_exif(img->image);
+    GString *in = ba_open_image(filepath);
+    img->metadata = ba_dump_exif(in);
+    g_string_free(in, TRUE);
     return img;
 }
 

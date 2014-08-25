@@ -15,5 +15,6 @@ balde_response_t* ba_view_index(balde_app_t *app, balde_request_t *req);
 balde_response_t* ba_view_image(balde_app_t *app, balde_request_t *req);
 balde_response_t* ba_view_full(balde_app_t *app, balde_request_t *req);
 balde_response_t* ba_view_thumb(balde_app_t *app, balde_request_t *req);
+balde_response_t* ba_view_resized(balde_app_t *app, balde_request_t *req);
 
 #endif /* _BALDE_ALBUM_VIEWS_H */

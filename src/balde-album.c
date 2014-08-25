@@ -65,6 +65,8 @@ main(int argc, char **argv)
         ba_view_full);
     balde_app_add_url_rule(app, "thumb", "/thumb/<filename>", BALDE_HTTP_GET,
         ba_view_thumb);
+    balde_app_add_url_rule(app, "resized", "/resized/<filename>", BALDE_HTTP_GET,
+        ba_view_resized);
 
     balde_app_run(app);
     ba_app_free(app);

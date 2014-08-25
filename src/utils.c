@@ -34,10 +34,6 @@ ba_free_image(ba_image_t *img)
     g_free(img->filepath);
     g_free(img->filename);
     g_free(img->mimetype);
-    if (img->image != NULL)
-        g_string_free(img->image, TRUE);
-    if (img->thumb != NULL)
-        g_string_free(img->thumb, TRUE);
     g_slist_free_full(img->metadata, (GDestroyNotify) ba_free_image_metadata);
     g_free(img);
 }
@@ -74,4 +70,21 @@ ba_shorten_filename(const gchar *filename)
         g_string_append_c(rv, filename[j]);
     }
     return g_string_free(rv, FALSE);
+}
+
+
+GString*
+ba_open_image(const gchar *filepath)
+{
+    gchar *contents;
+    gsize length;
+    GError *tmp_error = NULL;
+    if (!g_file_get_contents(filepath, &contents, &length, &tmp_error)) {
+        g_printerr("%s\n", tmp_error->message);
+        g_error_free(tmp_error);
+        return NULL;
+    }
+    GString *rv = g_string_new_len(contents, length);
+    g_free(contents);
+    return rv;
 }

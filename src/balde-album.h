@@ -16,6 +16,9 @@
 #define IMAGES_PER_ROW 4
 #define MAX_FILENAME_LENGTH 32
 #define MAX_IMAGE_WIDTH 900
+#define MAX_IMAGE_HEIGHT 700
+#define MAX_THUMB_WIDTH 200
+#define MAX_THUMB_HEIGHT 150
 
 typedef struct {
     gchar *name;
@@ -24,11 +27,9 @@ typedef struct {
 } ba_image_metadata_t;
 
 typedef struct {
-    gchar *filepath;  // nul-terminated string
-    gchar *filename;  // nul-terminated string
-    gchar *mimetype;  // nul-terminated string
-    GString *image;   // binary string
-    GString *thumb;   // binary string
+    gchar *filepath;
+    gchar *filename;
+    gchar *mimetype;
     GSList *metadata;
 } ba_image_t;
 

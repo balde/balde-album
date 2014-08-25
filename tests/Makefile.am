@@ -10,11 +10,13 @@ check_foo_SOURCES = \
 AM_CFLAGS = \
 	$(all_includes) \
 	$(BALDE_CFLAGS) \
-	$(LIBEXIF_CFLAGS)
+	$(LIBEXIF_CFLAGS) \
+	$(MAGICKWAND_CFLAGS)
 
 AM_LDFLAGS = \
 	$(BALDE_LIBS) \
-	$(LIBEXIF_LIBS)
+	$(LIBEXIF_LIBS) \
+	$(MAGICKWAND_LIBS)
 
 clean-local:
 	-rm -rf valgrind-*.xml
