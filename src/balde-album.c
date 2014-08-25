@@ -6,67 +6,9 @@
  * See the file COPYING.
  */
 
-/**
- * TGV 9713 - PARIS GARE LYON -> BARCELONA SANTS - August 12, 2014 - 10:07
- *
- * It's going to be a long journey...
- */
-
-
-/**
- * Read me!!!!11!
- *
- *
- * How to build this thing?!
- *
- * $ gcc -std=c99 -o balde-album balde-album.c $(pkg-config --libs --cflags \
- *       glib-2.0 gio-2.0 libexif balde) -lm -ljpeg
- *
- * It depends on balde, glib, gio, libexif and libjpeg/libjpeg-turbo
- *
- *
- * Where are the tests?!
- *
- * Seriously? :P
- *
- *
- * How to run this shit?!
- *
- * Take a look at balde documentation. A sample apache snippet, with
- * mod_fastcgid would look like this:
- *
- * <VirtualHost *:80>
- *     ServerName localhost
- *     ScriptAlias /album/ /path/to/balde-album/
- *     FcgidInitialEnv TITLE "My shiny new image gallery"
- *     FcgidInitialEnv IMAGES_DIRECTORY "/var/www/pics"
- *     <Directory /path/to>
- *         Order allow,deny
- *         Allow from all
- *         Options ExecCGI
- *         SetHandler fcgid-script
- *     </Directory>
- * </VirtualHost>
- *
- * The images directory and the images itself must be readable by the
- * webserver, obviously.
- *
- * Just open your browser and point to /album/, and voila. (if you did
- * everything correctly).
- *
- *
- * WARNINGS:
- *
- * - This thing just supports thumbnails embedded in the original image's
- *   EXIF metadata, no runtime generation is done.
- * - The image width detection just works with images that provides the
- *   relevant EXIF metadata, or JPEG images.
- * - To add new images you need to reload the FastCGI processes manually, no
- *   fancy reloaders at all.
- * - This is just a quick hack that comes without guarantees!
- *
- */
-
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif /* HAVE_CONFIG_H */
 
 #include <glib.h>
 #include <balde.h>
